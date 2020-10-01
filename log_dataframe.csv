@@ -1,0 +1,1 @@
+time,title,h,w,use_coronal,use_sagital,augment,hard_labeling,lr,batch_size,latent_size,nb_epochs,weight_decay,weight_of_class,dropout_rate,temporal_division,top_20_score
