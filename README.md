@@ -39,7 +39,6 @@ Green is side patches. Yellow is middle patches. White is FCD ellipse mask.
 
 ## Aknowledgements
 
-Project medical partner: science-practical [center n.a. Pirogov](http://www.pirogov-center.ru/english/about/) for annotated test data. 
-We acknowledge Zhores HPC for the computation facilities.
+We acknowledge our project medical partner science-practical [center n.a. Pirogov](http://www.pirogov-center.ru/english/about/) for annotated data. We acknowledge Zhores HPC cluster for the computation facilities.
 
 
