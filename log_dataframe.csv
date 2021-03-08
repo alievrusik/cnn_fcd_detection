@@ -1,1 +1,4 @@
-time,title,h,w,use_coronal,use_sagital,augment,hard_labeling,lr,batch_size,latent_size,nb_epochs,weight_decay,weight_of_class,dropout_rate,temporal_division,top_20_score
+time,title,h,w,use_coronal,use_sagital,augment,hard_labeling,lr,batch_size,latent_size,nb_epochs,weight_decay,weight_of_class,dropout_rate,temporal_division,mods,top_20_score
+23.12.2020-02:54:27,patch_model,24,40,False,False,True,False,0.0003,128,256,1,0.0004,1,0.4,False,3,0.0
+23.12.2020-03:30:43,patch_model,32,48,False,False,True,False,0.0003,128,256,8,0.0004,1,0.4,False,3,0.25
+23.12.2020-05:15:18,patch_model,40,64,False,False,True,False,0.0003,128,256,8,0.0004,1,0.4,False,3,0.0

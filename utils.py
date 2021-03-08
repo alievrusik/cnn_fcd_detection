@@ -1,14 +1,14 @@
 import torch
 import numpy as np
 import os
-
 from datetime import datetime
-
 import pandas as pd
+import wandb
 
 def calculate_top_k_metric(target, predicted, k=20):
     top_indices = np.argsort(predicted)[::-1][:k]
     return (target[top_indices] > 0).mean()
+
 
 def weighted_binary_cross_entropy(output, target, weights=None):
     output = torch.clamp(torch.sigmoid(output), min=1e-8, max=1-1e-8)
@@ -20,13 +20,18 @@ def weighted_binary_cross_entropy(output, target, weights=None):
     return torch.neg(torch.mean(loss))
 
 
-def setup_experiment(title):
+def setup_experiment(title, config):
     current_time = datetime.now().strftime("%d.%m.%Y-%H:%M:%S")
     experiment_name = "{}@{}".format(title, current_time)
     os.makedirs(f'./plots/{experiment_name}', exist_ok=True)
     os.makedirs(f'./checkpoints/{experiment_name}', exist_ok=True)
     os.makedirs(f'./data/predicted_masks/{experiment_name}', exist_ok=True)
+
+    os.environ['WANDB_API_KEY'] = '7232fe584829d234576e43351c359921cab60b1b'
+    wandb.init(project="cnn-fcd-detection", name=experiment_name, notes=config.message)
+    wandb.config.update(config)
     return experiment_name, current_time
+
 
 def log_experiment(config, current_time, top_k_metric):
     log_df = pd.read_csv('./log_dataframe.csv')
@@ -47,38 +52,32 @@ def log_experiment(config, current_time, top_k_metric):
         config.weight_decay,
         config.weight_of_class,
         config.dropout_rate, 
-        config.temporal_division, 
+        config.temporal_division,
+        config.nb_of_modalities,
         top_k_metric
     ]
     log_df.to_csv('./log_dataframe.csv', index=False)
-    
-
 
 
 def get_brain_name_by_idx(idx, fcd=True):
-    """
-        idx < 15
-    """
     if fcd:
         return os.path.join('./data/fcd_brains/', f'fcd_{str(idx).zfill(2)}.nii.gz')
     else:
         return os.path.join('./data/fcd_brains/', f'nofcd_{str(idx).zfill(2)}.nii.gz')
 
 
-
 def get_mask_name_by_idx(idx):
-    """
-        idx < 15
-    """
     return os.path.join('./data/masks/', f'mask_{str(idx).zfill(2)}.nii.gz')
 
 
 def get_pred_mask_name_by_idx(experiment_name, idx, fcd=True):
-    """
-        idx < 15
-    """
     if fcd:     
-        return os.path.join('./data/predicted_masks/', experiment_name, f'predicted_mask_{str(idx).zfill(2)}.nii.gz')
+        return os.path.join(
+            './data/predicted_masks/', experiment_name, f'predicted_mask_{str(idx).zfill(2)}.nii.gz'
+        )
     else:
-        return os.path.join('./data/predicted_masks/', experiment_name, f'nofcd_predicted_mask_{str(idx).zfill(2)}.nii.gz')        
+        return os.path.join(
+            './data/predicted_masks/', experiment_name, f'nofcd_predicted_mask_{str(idx).zfill(2)}.nii.gz'
+        )
+
 
